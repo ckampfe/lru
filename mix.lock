@@ -1,0 +1,3 @@
+%{
+  "cbuf": {:git, "https://github.com/ckampfe/cbuf.git", "b6d72b002c8be9cb438d745d2744f93fb3ec2971", [ref: "b6d72b002c8be9cb438d745d2744f93fb3ec2971"]},
+}
