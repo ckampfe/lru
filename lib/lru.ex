@@ -41,23 +41,38 @@ defmodule LRU do
       iex> cache = LRU.new(3)
       iex> cache |> LRU.put(:a, 1) |> LRU.put(:b, 2) |> LRU.put(:c, 3) |> LRU.put(:d, 4)
       #LRU<%{b: 2, c: 3, d: 4}>
+
+      iex> cache = LRU.new(3)
+      iex> cache |> LRU.put(:a, 1) |> LRU.put(:b, 2) |> LRU.put(:c, 3) |> LRU.put(:d, 4) |> LRU.put(:d, 5)
+      #LRU<%{b: 2, c: 3, d: 5}>
+
+      iex> cache = LRU.new(3)
+      iex> {c, v} = cache |> LRU.put(:a, 1) |> LRU.put(:b, 2) |> LRU.put(:c, 3) |> LRU.get(:a)
+      iex> c |> LRU.put(:d, 5)
+      #LRU<%{a: 1, c: 3, d: 5}>
   """
   def put(cache, key, value) do
     if cache.count >= cache.size do
       key_to_delete = Buf.peek(cache.ages)
 
       new_impl =
-        cache.impl
-        |> Map.delete(key_to_delete)
-        |> Map.put(key, value)
+        if Map.has_key?(cache.impl, key) do
+          Map.put(cache.impl, key, value)
+        else
+          cache.impl
+          |> Map.delete(key_to_delete)
+          |> Map.put(key, value)
+        end
 
       %{cache | impl: new_impl, ages: Buf.insert(cache.ages, key)}
     else
+      new_impl = Map.put(cache.impl, key, value)
+
       %{
         cache
-        | impl: Map.put(cache.impl, key, value),
+        | impl: new_impl,
           ages: Buf.insert(cache.ages, key),
-          count: cache.count + 1
+          count: Enum.count(new_impl)
       }
     end
   end

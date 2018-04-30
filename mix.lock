@@ -1,3 +1,4 @@
 %{
   "cbuf": {:git, "https://github.com/ckampfe/cbuf.git", "b6d72b002c8be9cb438d745d2744f93fb3ec2971", [ref: "b6d72b002c8be9cb438d745d2744f93fb3ec2971"]},
+  "stream_data": {:hex, :stream_data, "0.4.2", "fa86b78c88ec4eaa482c0891350fcc23f19a79059a687760ddcf8680aac2799b", [], [], "hexpm"},
 }
